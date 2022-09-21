@@ -1,0 +1,18 @@
+{
+  "name": "quill_base",
+  "version": "1.0.0",
+  "description": "퀼이다 헤헤",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon server"
+  },
+  "author": "PCY",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "express": "^4.18.1",
+    "nunjucks": "^3.2.3"
+  }
+}
