@@ -90,6 +90,8 @@
         testGlobal = ['slslslslslsl']
 
         quill.on('text-change', (delta, source) => {
+
+            console.log(quill.root.innerHTML);
             var justHtml = quill.root.innerHTML;
             console.log(testGlobal);
 
