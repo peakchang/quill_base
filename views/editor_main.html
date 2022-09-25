@@ -18,58 +18,36 @@
 
 
 
+
     <!-- Create the editor container -->
     <form action="update" method="post" id="mainform">
-        <input type="text" name="test">
-        <textarea name="quill_val" cols="60" rows="30" id="output-html"></textarea>
-        <!-- <div class="ql-snow">
-            <div class="ql-editor" id="output-html">
-               // the content goes here
-            </div>
-         </div> -->
+        <textarea name="quill_val" id="output-html" style="display: none;"></textarea>
 
-        <div id="editor">
-            <p>Hello World!</p>
-            <p>Some initial <strong>bold</strong> text</p>
-            <p><br></p>
+        <div style="width:80%; margin:0 auto;">
+            <div id="editor" style="height: 500px; "></div>
         </div>
+
         <div>
             <button>dkdkdkdkdk</button>
         </div>
     </form>
 
-    <button class="testax">testBtn</button>
+    <button class="test11">saljdflasf</button>
 
 
 
     <!-- Initialize Quill editor -->
     <script>
 
-        const testax = document.querySelector('.testax');
-        testax.addEventListener('click', (e) => {
-
-            var testVal = {name: '창용', age: 38}
-            axios.post(`/testax`, testVal)
-                .then((res) => {
-                    console.log(res.data);
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-
-        })
-
-
-
         var toolbarOptions = [
             ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-            ['blockquote', 'code-block'],
+            // ['blockquote', 'code-block'],
 
-            [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-            [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
+            // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+            // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+            // [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+            // [{ 'direction': 'rtl' }],                         // text direction
             [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
             // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
             [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
@@ -83,88 +61,61 @@
             theme: 'snow',
             modules: {
                 toolbar: toolbarOptions
-            }
+            },
+            placeholder: '후기를 작성해주세요',
         });
 
-
-        testGlobal = ['slslslslslsl']
 
         quill.on('text-change', (delta, source) => {
+            document.getElementById('output-html').innerHTML = quill.root.innerHTML;
 
-            console.log(quill.root.innerHTML);
             var justHtml = quill.root.innerHTML;
-            console.log(testGlobal);
-
-            // console.log(justHtml);
-
-            var getBase64 = chkBase64(justHtml)
-            if (getBase64 != "") {
-                var file = base64toFile(getBase64[0], 'image_file.png');
-                var form_data = document.querySelector('#mainform')
-                form_data.append("file", file);
-                console.log(getBase64);
+            // var regEx = /data\:[\w\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]([^\"])*/g;
+            const regEcAll = /\<img\ssrc\=\"[\w\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]([^\<])*/g;
+            var chkImageNum = justHtml.match(regEcAll);
+            if (chkImageNum != null) {
+                console.log(chkImageNum.length);
             }
-            document.getElementById('output-html').innerHTML = justHtml;
+
+
+            // var getBase64 = justHtml.match(regEx)
+            // if(getBase64.length -1 != imgVal.length){
+
+            // }
+            // // console.log(getBase64);
+            // if (getBase64 != null && getBase64.length -1 == imgVal.length) {
+            //     var baseDataArr = getBase64[0].split(',');
+            //     // var base64Data = { base64Data: baseDataArr[1] }
+            //     const formData = new FormData();
+            //     formData.append('img', baseDataArr[1]);
+            //     axios.post(`/testax`, formData)
+            //         .then((res) => {
+            //             console.log(res);
+            //             imgVal.push(res.data)
+            //             console.log(imgVal);
+            //         })
+            //         .catch((err) => {
+            //             console.error(err);
+            //         });
+            // }
         });
 
-
-        function chkBase64(hihi) {
-            let arr1 = hihi.split('img').map(v => v.includes('src') === true && v.split('src='));
-            let arr2 = arr1.map(v => v && v[1]?.split("></p"));
-            return arr2.map(v => v && v[0].slice(1, v[0]?.length - 1)).filter(v => v !== false);
-        }
-
-        function base64toFile(base_data, filename) {
-            var arr = base_data.split(',');
-            // var mime = arr[0].match(/:(.*?);/);
-            // var bstr = Base64.decodeBase64(arr[1].getByte());
-
-            var base64Data = {base64Data: arr[1]}
-            axios.post(`/testax`, base64Data)
-                .then((res) => {
-                    console.log(res.data);
-                    testGlobal.push('dididiidid')
-                })
-                .catch((err) => {
-                    console.error(err);
-                });
-            console.log(arr[1]);
-            //     bstr = atob(arr[1]),
-            //     n = bstr.length,
-            //     u8arr = new Uint8Array(n);
-            // while (n--) {
-            //     u8arr[n] = bstr.charCodeAt(n);
-            // }
-
-            // return new File([u8arr], filename, { type: mime });
-        }
+        document.addEventListener('change', function(e) {
+            if(e.target.className == 'ql-image'){
+                console.log(e.target.files);
+                console.log('여기서는 이미지 업로드!!!');
+            }
+        })
 
 
-
-
-        // const searchSrc = (root) => {
-        //     const arr1 = root.split('img').map(v => v.includes('src') === true && v.split("src="));
-        //     const arr2 = arr1.map(v => v && v[1]?.split("></p"))
-        //     return arr2.map(v => v && v[0].slice(1, v[0]?.length - 1)).filter(v => v !== false);
-        // } // "data:image/png;base64~~~"
-
-        // searchSrc(quillInstance?.current?.root?.innerHTML).map((v, i) => {
-        //     if (v?.length > 1000) { //  "data:image/png;base64~~~"는 1000자를 넘어가기 때문에 + base64만 가져오기 위해서
-        //         const imgBase64 = v;
-        //         const file = DataURIToBlob(imgBase64);
-        //     }
+        // document.querySelector('input.ql-image').addEventListener('change', function (f) {
+        //     console.log(this);
+        //     console.log('alsidfjalsdjfliajdf');
+        //     f.preventDefault()
         // })
 
-        // DataURIToBlob = (dataURI) => {
-        //     const splitDataURI = dataURI.split(',')
-        //     const byteString = splitDataURI[0].indexOf('base64') >= 0 ? atob(splitDataURI[1]) : decodeURI(splitDataURI[1])
-        //     const mimeString = splitDataURI[0].split(':')[1].split(';')[0]
-        //     const ia = new Uint8Array(byteString.length)
-        //     for (let i = 0; i < byteString.length; i++)
-        //         ia[i] = byteString.charCodeAt(i)
 
-        //     return new Blob([ia], { type: mimeString })
-        // } // 출처 stackoverflow
+
     </script>
 </body>
 

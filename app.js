@@ -7,7 +7,7 @@ const nunjucks = require('nunjucks');
 const mainRouter = require('./routes');
 
 const app = express();
-app.set('port', process.env.PORT || 8001);
+app.set('port', process.env.PORT || 4090);
 app.set('view engine', 'html');
 nunjucks.configure('views', {
     express: app,
